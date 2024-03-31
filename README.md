@@ -1,13 +1,19 @@
 # AMS2-MusicOnRace
 This is a script for Automobilista 2 based on [CREST2-AMS2](https://github.com/viper4gh/CREST2-AMS2). 
 It will virtually trigger the media keys to play or pause the currently playing media when a race starts or is paused/stopped, respectively. 
-The source bould be e.g. YouTube, Spotify, or local music.
+The source could be e.g. YouTube, Spotify, or local music.
+
+
+## Requirements
+- python > 3.8
+  - `requests`
+  - winsdk
 
 
 ## Setup
 1. Download this repo's source
 2. Download [CREST2-AMS2](https://github.com/viper4gh/CREST2-AMS2) and unzip it inside the root folder
-
+3. Make sure to enable shared memory in the settings (see CREST2-AMS2)
 
 ## Usage
 
