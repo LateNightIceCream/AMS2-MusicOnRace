@@ -1,14 +1,25 @@
-import numpy as np
 import time
-import MediaKeys
 import requests
 import json
 
+import asyncio
+
+from winsdk.windows.media.control import \
+    GlobalSystemMediaTransportControlsSessionManager as MediaManager
+
+
+async def get_media_session():
+    sessions = await MediaManager.request_async()
+    current_session = sessions.get_current_session()
+    if not current_session:
+        return None
+    return current_session
+
 
 API_GET_ADDRESS = "http://localhost:8180/crest2/v1/api?gameStates=true"
-target_game_state = 2
-target_race_state = 2
-
+TARGET_GAME_STATE = 2
+TARGET_RACE_STATE = 2
+POLL_INTERVAL_SECS = 5
 
 previously_racing = False
 
@@ -17,7 +28,6 @@ while True:
     response = requests.get(API_GET_ADDRESS)
 
     if not response:
-        #raise Exception(f"Non-success status code: {response.status_code}")
         print("could not get AMS2 information")
         print("retrying in 5 seconds...")
         time.sleep(5)
@@ -27,29 +37,31 @@ while True:
     game_state = resp_dict['gameStates']['mGameState']
     race_state = resp_dict['gameStates']['mRaceState']
 
-    if game_state == target_game_state and race_state == target_race_state:
+
+    if game_state == TARGET_GAME_STATE and race_state == TARGET_RACE_STATE:
         
         if not previously_racing:
-            # toggle media
             print("NOW RACING")
-            print("toggling media")
-            MediaKeys.PressKey(MediaKeys.VK_MEDIA_NEXT_TRACK)
-            MediaKeys.PressKey(MediaKeys.VK_MEDIA_PLAY_PAUSE)
+            print("starting media")
+            session = asyncio.run(get_media_session())
+            if session:
+                # session.try_skip_next_async()
+                session.try_play_async()
 
         previously_racing = True
 
     else:
-        
+
         print("not racing")
 
         if previously_racing:
-            # toogle media
-            print("toggling media")
-            MediaKeys.PressKey(MediaKeys.VK_MEDIA_PLAY_PAUSE)
-        
+            print("pausing media")
+            session = asyncio.run(get_media_session())
+            if session:
+                session.try_pause_async()
         
         previously_racing = False
         
     print("-----")
 
-    time.sleep(5)
+    time.sleep(POLL_INTERVAL_SECS)
