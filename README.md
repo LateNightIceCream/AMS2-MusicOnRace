@@ -7,7 +7,7 @@ The source could be e.g. YouTube, Spotify, or local music.
 ## Requirements
 - python > 3.8
   - `requests`
-  - winsdk
+  - `winsdk`
 
 
 ## Setup
