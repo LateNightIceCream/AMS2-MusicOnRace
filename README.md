@@ -13,7 +13,7 @@ The source could be e.g. YouTube, Spotify, or local music.
 ## Setup
 1. Download this repo's source
 2. Download [CREST2-AMS2](https://github.com/viper4gh/CREST2-AMS2) and unzip it inside the root folder
-
+3. Make sure to enable shared memory in the settings (see CREST2-AMS2)
 
 ## Usage
 
